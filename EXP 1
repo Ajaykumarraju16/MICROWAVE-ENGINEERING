@@ -1,0 +1,32 @@
+clc;
+clear;
+close all;
+
+c = 3e8;
+a = 22.86e-3;
+b = 10.16e-3;
+f = 10e9;
+
+% Cutoff frequencies
+fc_TE10 = c/(2*a);
+fc_TE20 = c/a;
+fc_TM11 = c/2*sqrt((1/a)^2+(1/b)^2);
+
+% Propagation constants
+beta_TE10 = 2*pi*f/c*sqrt(1-(fc_TE10/f)^2);
+beta_TE20 = 2*pi*f/c*sqrt(1-(fc_TE20/f)^2);
+
+fprintf('TE10 fc = %.3f GHz\n',fc_TE10/1e9);
+fprintf('TE20 fc = %.3f GHz\n',fc_TE20/1e9);
+fprintf('TM11 fc = %.3f GHz\n',fc_TM11/1e9);
+fprintf('TE10 beta = %.2f rad/m\n',beta_TE10);
+fprintf('TE20 beta = %.2f rad/m\n',beta_TE20);
+
+figure;
+x = linspace(0,a,100);
+y = sin(pi*x/a);
+plot(x*1000,y,'LineWidth',2);
+xlabel('Width (mm)');
+ylabel('E-field');
+title('TE10 Electric Field');
+grid on;
