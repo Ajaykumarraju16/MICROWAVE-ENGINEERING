@@ -1,0 +1,38 @@
+experiment 2
+
+
+clc;
+clear;
+close all;
+
+f = 8e9:10e6:12e9;
+Z0 = 50;
+L = 50e-3;
+c = 3e8;
+
+beta = 2*pi*f/c;
+
+% Ideal 50-ohm matched line
+S11 = zeros(size(f));
+S22 = zeros(size(f));
+S21 = exp(-1j*beta*L);
+S12 = S21;
+
+RL = -20*log10(abs(S11)+eps);
+IL = -20*log10(abs(S21));
+eta = abs(S21).^2*100;
+
+figure;
+plot(f/1e9,20*log10(abs(S21)),'LineWidth',2);
+hold on;
+plot(f/1e9,20*log10(abs(S11)+eps),'LineWidth',2);
+xlabel('Frequency (GHz)');
+ylabel('Magnitude (dB)');
+legend('S21','S11');
+grid on;
+title('Two-Port S-Parameters');
+
+fprintf('At 10 GHz:\n');
+fprintf('Return Loss = %.2f dB\n',RL(201));
+fprintf('Insertion Loss = %.2f dB\n',IL(201));
+fprintf('Efficiency = %.2f %%\n',eta(201));
