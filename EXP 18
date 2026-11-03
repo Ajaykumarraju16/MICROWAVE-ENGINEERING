@@ -1,0 +1,81 @@
+clc;
+clear;
+close all;
+
+fc = 28e9;
+Nt = 16;
+Nr = 4;
+SNRdB = 10;
+
+% MIMO channel
+H = (randn(Nr,Nt)+1j*randn(Nr,Nt))/sqrt(2);
+
+% SVD beamforming
+[U,S,V] = svd(H);
+
+Ns = min(Nt,Nr);
+
+% Channel singular values
+sv = diag(S);
+
+% Spectral efficiency
+SNR = 10^(SNRdB/10);
+capacity = sum(log2(1 + SNR/Ns*sv(1:Ns).^2));
+
+% Throughput for 10 MHz bandwidth
+BW = 10e6;
+throughput = capacity*BW;
+
+fprintf('Frequency = %.2f GHz\n',fc/1e9);
+fprintf('Transmit Antennas = %d\n',Nt);
+fprintf('Receive Antennas = %d\n',Nr);
+fprintf('Spatial Streams = %d\n',Ns);
+fprintf('Spectral Efficiency = %.2f bits/s/Hz\n',capacity);
+fprintf('Throughput = %.2f Mbps\n',throughput/1e6);
+
+figure;
+bar(sv);
+xlabel('Spatial Stream');
+ylabel('Singular Value');
+title('Massive MIMO Channel');
+grid on;clc;
+clear;
+close all;
+
+fc = 28e9;
+Nt = 16;
+Nr = 4;
+SNRdB = 10;
+
+% MIMO channel
+H = (randn(Nr,Nt)+1j*randn(Nr,Nt))/sqrt(2);
+
+% SVD beamforming
+[U,S,V] = svd(H);
+
+Ns = min(Nt,Nr);
+
+% Channel singular values
+sv = diag(S);
+
+% Spectral efficiency
+SNR = 10^(SNRdB/10);
+capacity = sum(log2(1 + SNR/Ns*sv(1:Ns).^2));
+
+% Throughput for 10 MHz bandwidth
+BW = 10e6;
+throughput = capacity*BW;
+
+fprintf('Frequency = %.2f GHz\n',fc/1e9);
+fprintf('Transmit Antennas = %d\n',Nt);
+fprintf('Receive Antennas = %d\n',Nr);
+fprintf('Spatial Streams = %d\n',Ns);
+fprintf('Spectral Efficiency = %.2f bits/s/Hz\n',capacity);
+fprintf('Throughput = %.2f Mbps\n',throughput/1e6);
+
+figure;
+bar(sv);
+xlabel('Spatial Stream');
+ylabel('Singular Value');
+title('Massive MIMO Channel');
+grid on;
