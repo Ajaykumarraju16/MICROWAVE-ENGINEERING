@@ -1,0 +1,42 @@
+clc;
+clear;
+close all;
+
+Z0 = 50;
+ZL = 75 + 1j*25;
+f0 = 10e9;
+
+% Reflection coefficient
+Gamma = (ZL-Z0)/(ZL+Z0);
+
+RL = -20*log10(abs(Gamma));
+VSWR = (1+abs(Gamma))/(1-abs(Gamma));
+
+fprintf('Reflection Coefficient = %.4f\n',abs(Gamma));
+fprintf('Return Loss = %.2f dB\n',RL);
+fprintf('VSWR = %.2f\n',VSWR);
+
+% Frequency response
+f = 8e9:0.01e9:12e9;
+
+% Simple ideal filter response
+fc = 10e9;
+S21 = 1./sqrt(1+(f/fc).^8);
+S11 = sqrt(1-S21.^2);
+
+IL = -20*log10(abs(S21));
+RLf = -20*log10(abs(S11));
+
+figure;
+plot(f/1e9,20*log10(abs(S21)),'LineWidth',2);
+xlabel('Frequency (GHz)');
+ylabel('S21 (dB)');
+title('Microwave Filter Response');
+grid on;
+
+figure;
+plot(f/1e9,20*log10(abs(S11)),'LineWidth',2);
+xlabel('Frequency (GHz)');
+ylabel('S11 (dB)');
+title('Filter Return Response');
+grid on;
