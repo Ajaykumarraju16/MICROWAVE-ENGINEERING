@@ -1,0 +1,44 @@
+clc;
+clear;
+close all;
+
+c = 3e8;
+f = 10e9;
+R = 1000;
+
+% Radar echo delay
+tau = 2*R/c;
+
+% Calculate range
+Rcalc = c*tau/2;
+
+lambda = c/f;
+
+fprintf('Frequency = %.2f GHz\n',f/1e9);
+fprintf('Target Range = %.2f m\n',R);
+fprintf('Echo Delay = %.3e s\n',tau);
+fprintf('Calculated Range = %.2f m\n',Rcalc);
+fprintf('Wavelength = %.4f m\n',lambda);
+
+% Radar pulse and echo
+t = 0:1e-8:10e-6;
+tx = zeros(size(t));
+rx = zeros(size(t));
+
+tx(t < 1e-6) = 1;
+
+delay_samples = round(tau/(t(2)-t(1)));
+
+if delay_samples < length(t)
+    rx(delay_samples+1:end) = tx(1:end-delay_samples);
+end
+
+figure;
+plot(t*1e6,tx,'LineWidth',2);
+hold on;
+plot(t*1e6,rx,'LineWidth',2);
+xlabel('Time (\mus)');
+ylabel('Amplitude');
+legend('Transmitted','Echo');
+title('Radar Target Detection');
+grid on;
