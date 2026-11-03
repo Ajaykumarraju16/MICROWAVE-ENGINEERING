@@ -1,0 +1,37 @@
+clc;
+clear;
+close all;
+
+f = 8e9:10e6:12e9;
+
+% Example two-port response
+S11 = -20 - 5*cos(2*pi*(f-10e9)/4e9);
+S22 = -18 - 4*cos(2*pi*(f-10e9)/4e9);
+S21 = -1 - 1*(sin(pi*(f-10e9)/4e9)).^2;
+S12 = -25*ones(size(f));
+
+% Find best frequencies
+[~,i1] = min(S11);
+[~,i2] = max(S21);
+
+RL = -S11(i1);
+IL = -S21(i2);
+Isolation = -S12(i2);
+
+fprintf('Minimum S11 frequency = %.3f GHz\n',f(i1)/1e9);
+fprintf('Maximum S21 frequency = %.3f GHz\n',f(i2)/1e9);
+fprintf('Return Loss = %.2f dB\n',RL);
+fprintf('Insertion Loss = %.2f dB\n',IL);
+fprintf('Isolation = %.2f dB\n',Isolation);
+
+figure;
+plot(f/1e9,S11,'LineWidth',2);
+hold on;
+plot(f/1e9,S21,'LineWidth',2);
+plot(f/1e9,S12,'LineWidth',2);
+plot(f/1e9,S22,'LineWidth',2);
+xlabel('Frequency (GHz)');
+ylabel('Magnitude (dB)');
+legend('S11','S21','S12','S22');
+title('Two-Port S-Parameters');
+grid on;
