@@ -1,0 +1,36 @@
+clc;
+clear;
+close all;
+
+fc = 10e9;
+fm = 0.1e9;
+A = 1;
+fs = 50e9;
+mu = 0.5;
+
+t = 0:1/fs:200/fm;
+
+% AM signal
+x = A*(1+mu*cos(2*pi*fm*t)).*cos(2*pi*fc*t);
+
+% FFT
+N = length(x);
+X = fft(x);
+f = (0:N-1)*(fs/N);
+
+P = abs(X)/N;
+
+% Positive frequency
+n = 1:floor(N/2);
+
+figure;
+plot(f(n)/1e9,20*log10(P(n)+eps));
+xlim([8 12]);
+xlabel('Frequency (GHz)');
+ylabel('Magnitude (dB)');
+title('Microwave AM Spectrum');
+grid on;
+
+fprintf('Carrier = %.2f GHz\n',fc/1e9);
+fprintf('Lower Sideband = %.2f GHz\n',(fc-fm)/1e9);
+fprintf('Upper Sideband = %.2f GHz\n',(fc+fm)/1e9);
